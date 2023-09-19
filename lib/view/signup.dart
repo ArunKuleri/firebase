@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:firebase/view/homepage.dart';
 import 'package:flutter/material.dart';
 
 class SignUp extends StatefulWidget {
@@ -9,6 +10,15 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUp extends State<SignUp> {
+  final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _ageController = TextEditingController();
+
+  final _bloodgroupController = TextEditingController();
+  final _Divisioncontroller = TextEditingController();
+  final _FirstNameController = TextEditingController();
+  final _LastNameController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,6 +48,13 @@ class _SignUp extends State<SignUp> {
                       border: Border.all(color: Colors.white),
                       borderRadius: BorderRadius.circular(12)),
                   child: TextFormField(
+                    controller: _FirstNameController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Please enter your first name";
+                      }
+                      return null;
+                    },
                     decoration: const InputDecoration(
                         border: InputBorder.none, hintText: " First Name"),
                   ),
@@ -54,6 +71,13 @@ class _SignUp extends State<SignUp> {
                       border: Border.all(color: Colors.white),
                       borderRadius: BorderRadius.circular(12)),
                   child: TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Please enter your last name";
+                      }
+                      return null;
+                    },
+                    controller: _LastNameController,
                     decoration: const InputDecoration(
                         border: InputBorder.none, hintText: " Last Name"),
                   ),
@@ -70,6 +94,13 @@ class _SignUp extends State<SignUp> {
                       border: Border.all(color: Colors.white),
                       borderRadius: BorderRadius.circular(12)),
                   child: TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Please enter your Email Address";
+                      }
+                      return null;
+                    },
+                    controller: _emailController,
                     decoration: const InputDecoration(
                         border: InputBorder.none, hintText: " Email Address "),
                   ),
@@ -86,6 +117,13 @@ class _SignUp extends State<SignUp> {
                       border: Border.all(color: Colors.white),
                       borderRadius: BorderRadius.circular(12)),
                   child: TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Please enter Age";
+                      }
+                      return null;
+                    },
+                    controller: _ageController,
                     decoration: const InputDecoration(
                         border: InputBorder.none, hintText: " Age"),
                   ),
@@ -102,6 +140,13 @@ class _SignUp extends State<SignUp> {
                       border: Border.all(color: Colors.white),
                       borderRadius: BorderRadius.circular(12)),
                   child: TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Please enter your Division";
+                      }
+                      return null;
+                    },
+                    controller: _Divisioncontroller,
                     decoration: const InputDecoration(
                         border: InputBorder.none, hintText: " Division"),
                   ),
@@ -118,6 +163,13 @@ class _SignUp extends State<SignUp> {
                       border: Border.all(color: Colors.white),
                       borderRadius: BorderRadius.circular(12)),
                   child: TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Please enter your Bloodgroup";
+                      }
+                      return null;
+                    },
+                    controller: _bloodgroupController,
                     decoration: const InputDecoration(
                         border: InputBorder.none, hintText: " Bloodgroup"),
                   ),
@@ -134,7 +186,16 @@ class _SignUp extends State<SignUp> {
                       border: Border.all(color: Colors.white),
                       borderRadius: BorderRadius.circular(12)),
                   child: TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter password';
+                      } else if (value.length < 8 ||
+                          !value.contains(RegExp(r'/d')) ||
+                          !value.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]')))
+                        return null;
+                    },
                     obscureText: true,
+                    controller: _passwordController,
                     decoration: const InputDecoration(
                         border: InputBorder.none, hintText: "  Password"),
                   ),
@@ -151,6 +212,15 @@ class _SignUp extends State<SignUp> {
                       border: Border.all(color: Colors.white),
                       borderRadius: BorderRadius.circular(12)),
                   child: TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter password';
+                      } else if (value.length < 8 ||
+                          !value.contains(RegExp(r'/d')) ||
+                          !value.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]')))
+                        return null;
+                    },
+                    controller: _passwordController,
                     obscureText: true,
                     decoration: const InputDecoration(
                         border: InputBorder.none,
@@ -178,6 +248,24 @@ class _SignUp extends State<SignUp> {
                   )),
                 ),
               ),
+              SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Already a member ? "),
+                  InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => HomePage()));
+                    },
+                    child: Text("Login ",
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontWeight: FontWeight.bold,
+                        )),
+                  )
+                ],
+              )
             ],
           ),
         ),
