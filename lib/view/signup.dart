@@ -1,5 +1,7 @@
 import 'dart:math';
-
+import 'package:firebase/view/profile.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase/view/homepage.dart';
 import 'package:flutter/material.dart';
 
@@ -10,15 +12,17 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUp extends State<SignUp> {
+  final CollectionReference user =
+      FirebaseFirestore.instance.collection('user');
   final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _ageController = TextEditingController();
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
+  TextEditingController age = TextEditingController();
 
-  final _bloodgroupController = TextEditingController();
-  final _Divisioncontroller = TextEditingController();
-  final _FirstNameController = TextEditingController();
-  final _LastNameController = TextEditingController();
+  TextEditingController bloodgroup = TextEditingController();
+  TextEditingController Division = TextEditingController();
+  TextEditingController FirstName = TextEditingController();
+  TextEditingController LastName = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,7 +52,7 @@ class _SignUp extends State<SignUp> {
                       border: Border.all(color: Colors.white),
                       borderRadius: BorderRadius.circular(12)),
                   child: TextFormField(
-                    controller: _FirstNameController,
+                    controller: FirstName,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return "Please enter your first name";
@@ -77,7 +81,7 @@ class _SignUp extends State<SignUp> {
                       }
                       return null;
                     },
-                    controller: _LastNameController,
+                    controller: LastName,
                     decoration: const InputDecoration(
                         border: InputBorder.none, hintText: " Last Name"),
                   ),
@@ -100,7 +104,7 @@ class _SignUp extends State<SignUp> {
                       }
                       return null;
                     },
-                    controller: _emailController,
+                    controller: email,
                     decoration: const InputDecoration(
                         border: InputBorder.none, hintText: " Email Address "),
                   ),
@@ -123,7 +127,7 @@ class _SignUp extends State<SignUp> {
                       }
                       return null;
                     },
-                    controller: _ageController,
+                    controller: age,
                     decoration: const InputDecoration(
                         border: InputBorder.none, hintText: " Age"),
                   ),
@@ -146,7 +150,7 @@ class _SignUp extends State<SignUp> {
                       }
                       return null;
                     },
-                    controller: _Divisioncontroller,
+                    controller: Division,
                     decoration: const InputDecoration(
                         border: InputBorder.none, hintText: " Division"),
                   ),
@@ -169,7 +173,7 @@ class _SignUp extends State<SignUp> {
                       }
                       return null;
                     },
-                    controller: _bloodgroupController,
+                    controller: bloodgroup,
                     decoration: const InputDecoration(
                         border: InputBorder.none, hintText: " Bloodgroup"),
                   ),
@@ -195,7 +199,7 @@ class _SignUp extends State<SignUp> {
                         return null;
                     },
                     obscureText: true,
-                    controller: _passwordController,
+                    controller: password,
                     decoration: const InputDecoration(
                         border: InputBorder.none, hintText: "  Password"),
                   ),
@@ -220,7 +224,7 @@ class _SignUp extends State<SignUp> {
                           !value.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]')))
                         return null;
                     },
-                    controller: _passwordController,
+                    controller: password,
                     obscureText: true,
                     decoration: const InputDecoration(
                         border: InputBorder.none,
@@ -228,25 +232,25 @@ class _SignUp extends State<SignUp> {
                   ),
                 ),
               ),
-              const SizedBox(
+              SizedBox(
                 height: 10,
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(12)),
-                  child: const Center(
-                      child: Text(
-                    "Sign Up",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18),
-                  )),
-                ),
+                padding: const EdgeInsets.all(25.0),
+                child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => profile()));
+                    },
+                    style: ButtonStyle(
+                        minimumSize: MaterialStateProperty.all(
+                            Size(double.infinity, 50)),
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.black)),
+                    child: Text(
+                      "Submit",
+                      style: TextStyle(fontSize: 20, color: Colors.white),
+                    )),
               ),
               SizedBox(height: 10),
               Row(
@@ -258,7 +262,7 @@ class _SignUp extends State<SignUp> {
                       Navigator.of(context).push(
                           MaterialPageRoute(builder: (context) => HomePage()));
                     },
-                    child: Text("Login ",
+                    child: Text("Login here ",
                         style: TextStyle(
                           color: Colors.blue,
                           fontWeight: FontWeight.bold,
