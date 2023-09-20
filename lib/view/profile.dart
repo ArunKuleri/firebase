@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase/view/update.dart';
 import 'package:flutter/material.dart';
 
 class profile extends StatefulWidget {
@@ -10,6 +11,10 @@ class profile extends StatefulWidget {
 class _profile extends State<profile> {
   final CollectionReference users =
       FirebaseFirestore.instance.collection('users');
+  void deleteUser(docId) {
+    users.doc(docId).delete();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +23,7 @@ class _profile extends State<profile> {
       ),
       backgroundColor: Colors.grey[200],
       body: StreamBuilder(
-        stream: users.snapshots(),
+        stream: users.orderBy('firstname').snapshots(),
         builder: (context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
             return ListView.builder(
@@ -39,8 +44,8 @@ class _profile extends State<profile> {
                             radius: 30,
                             child: Text(
                               usersSnap['division'],
-                              style:
-                                  TextStyle(fontSize: 25, color: Colors.white),
+                              style: const TextStyle(
+                                  fontSize: 25, color: Colors.white),
                             ),
                           ),
                         ),
@@ -50,12 +55,12 @@ class _profile extends State<profile> {
                         children: [
                           Text(
                             usersSnap['firstname'],
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 15, fontWeight: FontWeight.bold),
                           ),
                           Text(
                             usersSnap['last name'],
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 15, fontWeight: FontWeight.bold),
                           ),
                           Text(usersSnap['email']),
@@ -63,10 +68,25 @@ class _profile extends State<profile> {
                       ),
                       Row(
                         children: [
-                          IconButton(onPressed: () {}, icon: Icon(Icons.edit)),
                           IconButton(
-                              onPressed: () {},
-                              icon: Icon(Icons.delete_outline_sharp))
+                              onPressed: () {
+                                Navigator.pushNamed(context, '/update',
+                                    arguments: {
+                                      'firstname': usersSnap['firstname'],
+                                      'last name': usersSnap['last name'],
+                                      'age': usersSnap['age'].toString(),
+                                      'bloodgroup': usersSnap['Bloodgroup'],
+                                      'email': usersSnap['email'],
+                                      'division': usersSnap['division'],
+                                      'id': usersSnap.id,
+                                    });
+                              },
+                              icon: const Icon(Icons.edit)),
+                          IconButton(
+                              onPressed: () {
+                                deleteUser(usersSnap.id);
+                              },
+                              icon: const Icon(Icons.delete_outline_sharp))
                         ],
                       )
                     ],

@@ -5,40 +5,51 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase/view/homepage.dart';
 import 'package:flutter/material.dart';
 
-class SignUp extends StatefulWidget {
-  const SignUp({Key? key}) : super(key: key);
+class Update extends StatefulWidget {
+  const Update({Key? key}) : super(key: key);
   @override
-  State<SignUp> createState() => _SignUp();
+  State<Update> createState() => _Upadte();
 }
 
-class _SignUp extends State<SignUp> {
+class _Upadte extends State<Update> {
   final CollectionReference user =
       FirebaseFirestore.instance.collection('users');
-  void addUsers() {
-    final data = {
-      'firstname': FirstName.text,
-      'age': age.text,
-      'Bloodgroup': bloodgroup.text,
-      'division': Division.text,
-      'last name': LastName.text,
-      'email': email.text,
-    };
-    user.add(data);
-  }
 
   final _formKey = GlobalKey<FormState>();
   TextEditingController email = TextEditingController();
-  TextEditingController password = TextEditingController();
+
   TextEditingController age = TextEditingController();
-  TextEditingController ConfirmPassword = TextEditingController();
+
   TextEditingController bloodgroup = TextEditingController();
   TextEditingController Division = TextEditingController();
   TextEditingController FirstName = TextEditingController();
   TextEditingController LastName = TextEditingController();
+  void updateUser(docId) {
+    final data = {
+      'firstname': FirstName.text,
+      'last name': LastName.text,
+      'bloodgroup': bloodgroup.text,
+      'division': Division.text,
+      'email': email.text,
+      'age': age.text
+    };
+    user.doc(docId).update(data);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments as Map;
+    FirstName.text = args['firstname'];
+    LastName.text = args['last name'];
+    email.text = args['email'];
+    age.text = args['age'];
+    bloodgroup.text = args['bloodgroup'];
+    Division.text = args['division'];
+    final docId = args['id'];
+
     return Scaffold(
       appBar: AppBar(
+        title: const Text('Update Profile'),
         backgroundColor: Colors.grey[300],
       ),
       backgroundColor: Colors.grey[300],
@@ -49,33 +60,23 @@ class _SignUp extends State<SignUp> {
               const SizedBox(
                 height: 10,
               ),
-              const Text(
-                " Create your Account here !!",
-                style: TextStyle(fontSize: 20),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Form(
-                key: _formKey,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        border: Border.all(color: Colors.white),
-                        borderRadius: BorderRadius.circular(12)),
-                    child: TextFormField(
-                      controller: FirstName,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Please enter your first name";
-                        }
-                        return null;
-                      },
-                      decoration: const InputDecoration(
-                          border: InputBorder.none, hintText: " First Name"),
-                    ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      border: Border.all(color: Colors.white),
+                      borderRadius: BorderRadius.circular(12)),
+                  child: TextFormField(
+                    controller: FirstName,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Please enter your first name";
+                      }
+                      return null;
+                    },
+                    decoration: const InputDecoration(
+                        border: InputBorder.none, hintText: " First Name"),
                   ),
                 ),
               ),
@@ -198,65 +199,12 @@ class _SignUp extends State<SignUp> {
                 height: 10,
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      border: Border.all(color: Colors.white),
-                      borderRadius: BorderRadius.circular(12)),
-                  child: TextFormField(
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter password';
-                      } else if (value.length < 8 ||
-                          !value.contains(RegExp(r'/d')) ||
-                          !value.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]')))
-                        return null;
-                    },
-                    obscureText: true,
-                    controller: password,
-                    decoration: const InputDecoration(
-                        border: InputBorder.none, hintText: "  Password"),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      border: Border.all(color: Colors.white),
-                      borderRadius: BorderRadius.circular(12)),
-                  child: TextFormField(
-                    validator: (value) {
-                      return password.text == value
-                          ? null
-                          : "please enter correct password";
-                    },
-                    controller: ConfirmPassword,
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        hintText: " Confirm  Password"),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Padding(
                 padding: const EdgeInsets.all(25.0),
                 child: ElevatedButton(
                     onPressed: () {
-                      addUsers();
+                      updateUser(docId);
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => const profile()));
-                      if (_formKey.currentState!.validate()) {
-                        Navigator.pop(context);
-                      }
                     },
                     style: ButtonStyle(
                         minimumSize: MaterialStateProperty.all(
@@ -264,28 +212,10 @@ class _SignUp extends State<SignUp> {
                         backgroundColor:
                             MaterialStateProperty.all(Colors.black)),
                     child: const Text(
-                      "Submit",
+                      "Update",
                       style: TextStyle(fontSize: 20, color: Colors.white),
                     )),
               ),
-              const SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text("Already a member ? "),
-                  InkWell(
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const HomePage()));
-                    },
-                    child: const Text("Login here ",
-                        style: TextStyle(
-                          color: Colors.blue,
-                          fontWeight: FontWeight.bold,
-                        )),
-                  )
-                ],
-              )
             ],
           ),
         ),

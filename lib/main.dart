@@ -1,4 +1,7 @@
 import 'package:firebase/view/homepage.dart';
+import 'package:firebase/view/profile.dart';
+import 'package:firebase/view/signup.dart';
+import 'package:firebase/view/update.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -18,6 +21,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Student Database',
+      routes: {
+        '/signup': (context) => SignUp(),
+        '/profile': (context) => profile(),
+        '/update': (context) => Update()
+      },
+      initialRoute: '/',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
