@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase/view/homepage.dart';
 import 'package:flutter/material.dart';
+import '../model/authFunction.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -232,9 +233,9 @@ class _SignUp extends State<SignUp> {
                       borderRadius: BorderRadius.circular(12)),
                   child: TextFormField(
                     validator: (value) {
-                      return password.text == value
-                          ? null
-                          : "please enter correct password";
+                      if (value != password) {
+                        return "enter correct password";
+                      }
                     },
                     controller: ConfirmPassword,
                     obscureText: true,
@@ -250,13 +251,21 @@ class _SignUp extends State<SignUp> {
               Padding(
                 padding: const EdgeInsets.all(25.0),
                 child: ElevatedButton(
-                    onPressed: () {
-                      addUsers();
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        _formKey.currentState!.save();
+                        Auth.signupUser(
+                            email as String,
+                            password as String,
+                            Division as String,
+                            bloodgroup as String,
+                            FirstName as String,
+                            LastName as String,
+                            age as int,
+                            BuildContext);
+                      }
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => const profile()));
-                      if (_formKey.currentState!.validate()) {
-                        Navigator.pop(context);
-                      }
                     },
                     style: ButtonStyle(
                         minimumSize: MaterialStateProperty.all(
