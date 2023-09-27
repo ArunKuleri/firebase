@@ -60,6 +60,13 @@ class _Upadte extends State<Update> {
               const SizedBox(
                 height: 10,
               ),
+              const Padding(
+                padding: EdgeInsets.all(10.0),
+                child: CircleAvatar(
+                  radius: 70,
+                ),
+              ),
+              IconButton(onPressed: () {}, icon: Icon(Icons.edit)),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: Container(

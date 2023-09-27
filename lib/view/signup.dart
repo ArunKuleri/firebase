@@ -251,19 +251,8 @@ class _SignUp extends State<SignUp> {
               Padding(
                 padding: const EdgeInsets.all(25.0),
                 child: ElevatedButton(
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        _formKey.currentState!.save();
-                        Auth.signupUser(
-                            email as String,
-                            password as String,
-                            Division as String,
-                            bloodgroup as String,
-                            FirstName as String,
-                            LastName as String,
-                            age as int,
-                            BuildContext);
-                      }
+                    onPressed: () {
+                      addUsers();
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => const profile()));
                     },
